@@ -5,17 +5,20 @@ class Pusher {
   final String cluster;
   final String client = 'pusher.dart';
   final String key;
-  final String version = '0.6.0';
+  final String version = '0.1.0';
   final int protocol = 6;
 
-  Pusher({required this.key, this.cluster = 'eu'});
-
-  late final Connection connection = Connection(
-    url:
-        'wss://ws-$cluster.$url/app/$key?client=$client&version=$version&protocol=$protocol',
-    eventHandler: connectionHandler,
-  );
+  late final Connection connection;
   final Map<String, Channel> channels = {};
+
+  Pusher({required this.key, this.cluster = 'eu', Connection? connection}) {
+    this.connection = connection ??
+        Connection(
+          url:
+              'wss://ws-$cluster.$url/app/$key?client=$client&version=$version&protocol=$protocol',
+          eventHandler: connectionHandler,
+        );
+  }
 
   Future<void> connect() async {
     return connection.connect();
@@ -37,7 +40,7 @@ class Pusher {
     if (channels.containsKey(channelName)) {
       final data = {'channel': channelName};
       channels.remove(channelName);
-      connection.sendEvent('pusher:unsunsubscribe', data);
+      connection.sendEvent('pusher:unsubscribe', data);
     }
   }
 
