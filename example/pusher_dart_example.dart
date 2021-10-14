@@ -1,6 +1,12 @@
 import 'package:pusher_dart/pusher_dart.dart';
 
-void main() {
-  var awesome = Awesome();
-  print('awesome: ${awesome.isAwesome}');
+void main() async {
+  final pusher = Pusher(key: 'YOUR_APP_KEY');
+  await pusher.connect();
+  final channel = pusher.subscribe('channel');
+  channel.bind('event', (event) {
+    print('WOW event: $event');
+  });
+  await Future.delayed(Duration(seconds: 60));
+
 }
