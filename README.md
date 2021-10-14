@@ -1,5 +1,7 @@
 `pusher-dart` is a pure Dart pusher channels client.
 
+This client is work in progress and it is unstable.
+
 ## Usage
 
 A simple usage example:
