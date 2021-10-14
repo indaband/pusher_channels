@@ -15,5 +15,17 @@ void main() {
       channel.handleEvent('event-name', {'key': 'value'});
       expect(value, 'event with data {key: value} has been executed');
     });
+
+    test('bindGlobal', () {
+      var value = '';
+      channel.bindGlobal((eventName, data) {
+        value = 'event $eventName with data $data has been executed';
+      });
+      channel.handleEvent('event-name', {'key': 'value'});
+      expect(
+        value,
+        'event event-name with data {key: value} has been executed',
+      );
+    });
   });
 }
