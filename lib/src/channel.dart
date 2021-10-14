@@ -19,6 +19,10 @@ class Channel {
     globalCallback = callback;
   }
 
+  void unbindGlobal() {
+    globalCallback = null;
+  }
+
   void handleEvent(String eventName, Map<String, dynamic> data) {
     if (eventCallbacks.containsKey(eventName)) {
       eventCallbacks[eventName]?.call(data);

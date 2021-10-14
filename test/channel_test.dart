@@ -35,5 +35,13 @@ void main() {
       channel.unbind('event-name');
       expect(channel.eventCallbacks.containsKey('event-name'), false);
     });
+
+    test('unbindGlobal', () {
+      channel.bindGlobal((_, __) {});
+      expect(channel.globalCallback == null, false);
+
+      channel.unbindGlobal();
+      expect(channel.globalCallback == null, true);
+    });
   });
 }
