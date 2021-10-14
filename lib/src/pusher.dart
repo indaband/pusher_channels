@@ -5,7 +5,7 @@ class Pusher {
   final String cluster;
   final String client = 'pusher.dart';
   final String key;
-  final String version = '0.1.1';
+  final String version = '0.1.2';
   final int protocol = 6;
 
   late final Connection connection;

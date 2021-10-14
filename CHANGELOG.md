@@ -1,3 +1,7 @@
+## 0.1.2 - October 14, 2021
+
+- Fix pusher url
+
 ## 0.1.1 - October 14, 2021
 
 - Downgrade the required version of mocktail
