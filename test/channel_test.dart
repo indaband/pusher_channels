@@ -27,5 +27,13 @@ void main() {
         'event event-name with data {key: value} has been executed',
       );
     });
+
+    test('unbind', () {
+      channel.bind('event-name', (_) {});
+      expect(channel.eventCallbacks.containsKey('event-name'), true);
+
+      channel.unbind('event-name');
+      expect(channel.eventCallbacks.containsKey('event-name'), false);
+    });
   });
 }

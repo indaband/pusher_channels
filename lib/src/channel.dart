@@ -11,6 +11,10 @@ class Channel {
     eventCallbacks[eventName] = callback;
   }
 
+  void unbind(String eventName) {
+    eventCallbacks.remove(eventName);
+  }
+
   void bindGlobal(GlobalCallback callback) {
     globalCallback = callback;
   }
