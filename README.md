@@ -1,4 +1,4 @@
-A library for Dart developers.
+`pusher-dart` is a pure Dart pusher channels client.
 
 ## Usage
 
@@ -8,7 +8,12 @@ A simple usage example:
 import 'package:pusher_dart/pusher_dart.dart';
 
 main() {
-  var awesome = new Awesome();
+  final pusher = Pusher(key: 'YOUR_APP_KEY');
+  await pusher.connect();
+  final channel = pusher.subscribe('channel');
+  channel.bind('event', (event) {
+    print('WOW event: $event');
+  });
 }
 ```
 
@@ -16,4 +21,4 @@ main() {
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: http://example.com/issues/replaceme
+[tracker]: https://github.com/indaband/pusher-dart/issues
