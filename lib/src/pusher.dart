@@ -1,7 +1,7 @@
 import 'package:pusher_channels/pusher_channels.dart';
 
 class Pusher {
-  final String url = '.pusher.com:443';
+  final String url = 'pusher.com:443';
   final String cluster;
   final String client = 'pusher.dart';
   final String key;
