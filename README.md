@@ -1,4 +1,4 @@
-`pusher-dart` is a pure Dart pusher channels client.
+`pusher_channels` is a pure Dart pusher channels client.
 
 This client is work in progress and it is unstable.
 
@@ -7,7 +7,7 @@ This client is work in progress and it is unstable.
 A simple usage example:
 
 ```dart
-import 'package:pusher_dart/pusher_dart.dart';
+import 'package:pusher_channels/pusher_channels.dart';
 
 main() {
   final pusher = Pusher(key: 'YOUR_APP_KEY');
@@ -23,4 +23,4 @@ main() {
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: https://github.com/indaband/pusher-dart/issues
+[tracker]: https://github.com/indaband/pusher_channels/issues

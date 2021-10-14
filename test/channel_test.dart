@@ -1,4 +1,4 @@
-import 'package:pusher_dart/pusher_dart.dart';
+import 'package:pusher_channels/pusher_channels.dart';
 import 'package:test/test.dart';
 
 void main() {
