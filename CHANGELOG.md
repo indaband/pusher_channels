@@ -1,3 +1,7 @@
+## 0.1.3 - October 18, 2021
+
+- Implements the pusher.bindGlobal and pusher.unbindGlobal
+
 ## 0.1.2 - October 14, 2021
 
 - Fix pusher url
