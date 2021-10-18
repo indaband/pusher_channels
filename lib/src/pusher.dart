@@ -4,11 +4,11 @@ typedef PusherGlobalCallback = void Function(
     String channelName, String eventName, dynamic data);
 
 class Pusher {
-  final String url = '.pusher.com:443';
+  final String url = 'pusher.com:443';
   final String cluster;
   final String client = 'pusher.dart';
   final String key;
-  final String version = '0.1.1';
+  final String version = '0.1.2';
   final int protocol = 6;
 
   PusherGlobalCallback? globalCallback;
