@@ -1,5 +1,8 @@
 import 'package:pusher_channels/pusher_channels.dart';
 
+typedef PusherGlobalCallback = void Function(
+    String channelName, String eventName, dynamic data);
+
 class Pusher {
   final String url = '.pusher.com:443';
   final String cluster;
@@ -8,6 +11,7 @@ class Pusher {
   final String version = '0.1.1';
   final int protocol = 6;
 
+  PusherGlobalCallback? globalCallback;
   late final Connection connection;
   final Map<String, Channel> channels = {};
 
@@ -47,5 +51,14 @@ class Pusher {
   void connectionHandler(
       String eventName, String channelName, Map<String, dynamic> data) {
     channels[channelName]?.handleEvent(eventName, data);
+    globalCallback?.call(channelName, eventName, data);
+  }
+
+  void bindGlobal(PusherGlobalCallback callback) {
+    globalCallback = callback;
+  }
+
+  void unbindGlobal() {
+    globalCallback = null;
   }
 }

@@ -79,5 +79,26 @@ void main() {
         ),
       ).called(1);
     });
+
+    test('bindGlobal', () {
+      var value = '';
+      pusher.bindGlobal((channelName, eventName, data) {
+        value =
+            'event $eventName from $channelName with data $data has been executed';
+      });
+      pusher.connectionHandler('event-name', 'channel-name', {'key': 'value'});
+      expect(
+        value,
+        'event event-name from channel-name with data {key: value} has been executed',
+      );
+    });
+
+    test('unbindGlobal', () {
+      pusher.bindGlobal((_, __, ___) {});
+      expect(pusher.globalCallback == null, false);
+
+      pusher.unbindGlobal();
+      expect(pusher.globalCallback == null, true);
+    });
   });
 }
