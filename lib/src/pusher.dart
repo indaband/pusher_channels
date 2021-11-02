@@ -1,27 +1,29 @@
 import 'package:pusher_channels/pusher_channels.dart';
+import 'package:pusher_channels/src/not_initialized.dart';
 
 typedef PusherGlobalCallback = void Function(
     String channelName, String eventName, dynamic data);
 
 class Pusher {
-  final String url = 'pusher.com:443';
-  final String cluster;
-  final String client = 'pusher.dart';
-  final String key;
+  Connection? _connection;
+
   final String version = '0.1.3';
   final int protocol = 6;
 
   PusherGlobalCallback? globalCallback;
-  late final Connection connection;
   final Map<String, Channel> channels = {};
 
-  Pusher({required this.key, this.cluster = 'eu', Connection? connection}) {
-    this.connection = connection ??
-        Connection(
-          url:
-              'wss://ws-$cluster.$url/app/$key?client=$client&version=$version&protocol=$protocol',
-          eventHandler: connectionHandler,
-        );
+  Pusher();
+
+  Connection get connection {
+    if (_connection == null) {
+      throw NotInitialized();
+    }
+    return _connection!;
+  }
+
+  set connection(Connection connection) {
+    _connection = connection;
   }
 
   Future<void> connect() async {

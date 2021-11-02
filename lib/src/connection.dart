@@ -7,15 +7,22 @@ typedef EventHandler = void Function(
     String eventName, String channelName, Map<String, dynamic> data);
 
 class Connection {
-  final String url;
+  late final String url;
   late final WebSocket _socket;
   final Map<String, Function(dynamic event)> _eventCallbacks = {};
   final EventHandler eventHandler;
 
   Connection({
-    required this.url,
     required this.eventHandler,
+    required String url,
+    required String key,
+    required String version,
+    required String protocol,
+    bool secure = true,
+    String? client,
   }) {
+    this.url = '${secure ? 'wss' : 'ws'}://$url/app/$key?${client != null ? 'client=$client&' : ''}version=$version&protocol=$protocol';
+
     bind('pusher:connection_established', _connect_handler);
     bind('pusher:ping', _ping_handler);
     bind('pusher:error', _pusher_error_handler);

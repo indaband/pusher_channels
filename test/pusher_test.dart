@@ -1,5 +1,6 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:pusher_channels/pusher_channels.dart';
+import 'package:pusher_channels/src/not_initialized.dart';
 import 'package:test/test.dart';
 
 class MockConnection extends Mock implements Connection {}
@@ -11,11 +12,21 @@ void main() {
     late Pusher pusher;
 
     setUp(() {
-      pusher = Pusher(key: 'my-key', connection: MockConnection());
+      pusher = Pusher();
+      pusher.connection = MockConnection();
     });
 
     tearDown(() {
       reset(pusher.connection);
+    });
+
+    test('throw not initialized exception when connection is not set', () async {
+      try {
+        Pusher().subscribe('test');
+        expect(true, false);
+      } catch (e) {
+        expect(e is NotInitialized, true);
+      }
     });
 
     test('connect', () async {
