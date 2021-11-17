@@ -1,3 +1,7 @@
+## 0.1.4 - November 17, 2021
+
+- Implements auto retry when the connection is lost
+
 ## 0.1.3 - October 18, 2021
 
 - Implements the pusher.bindGlobal and pusher.unbindGlobal

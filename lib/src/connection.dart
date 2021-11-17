@@ -8,16 +8,17 @@ typedef EventHandler = void Function(
 
 class Connection {
   final String url;
-  late final WebSocket _socket;
+  WebSocket? _socket;
   final Map<String, Function(dynamic event)> _eventCallbacks = {};
   final EventHandler eventHandler;
+  bool pongReceived = false;
 
   Connection({
     required this.url,
     required this.eventHandler,
   }) {
     bind('pusher:connection_established', _connect_handler);
-    bind('pusher:ping', _ping_handler);
+    bind('pusher:pong', _pongHandler);
     bind('pusher:error', _pusher_error_handler);
   }
 
@@ -25,8 +26,19 @@ class Connection {
     print('Connection: Establisheds first connection $data');
   }
 
-  void _ping_handler(data) {
-    sendPong();
+  void _pongHandler(data) {
+    pongReceived = true;
+  }
+
+  void _checkPong() {
+    if (pongReceived) {
+      pongReceived = false;
+      sendPing();
+      return;
+    }
+
+    disconnect();
+    connect();
   }
 
   void _pusher_error_handler(data) {
@@ -42,13 +54,14 @@ class Connection {
   }
 
   void disconnect() {
-    _socket.close();
+    _socket?.close();
   }
 
   Future<void> connect() async {
     _socket = await WebSocket.connect(url);
-    _socket.listen(onMessage);
+    _socket?.listen(onMessage);
     sendPing();
+    Timer.periodic(Duration(seconds: 60), (timer) => _checkPong());
   }
 
   void onMessage(data) {
@@ -65,14 +78,10 @@ class Connection {
       'event': eventName,
       'data': data,
     };
-    _socket.add(jsonEncode(event));
+    _socket?.add(jsonEncode(event));
   }
 
   void sendPing() {
     sendEvent('pusher:ping', {'data': ''});
-  }
-
-  void sendPong() {
-    sendEvent('pusher:pong', {'data': ''});
   }
 }
