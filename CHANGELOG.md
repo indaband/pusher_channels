@@ -1,3 +1,7 @@
+## 0.1.5 - November 23, 2021
+
+- Change auto retry to be less aggressive
+
 ## 0.1.4 - November 17, 2021
 
 - Implements auto retry when the connection is lost

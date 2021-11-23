@@ -12,6 +12,7 @@ class Connection {
   final Map<String, Function(dynamic event)> _eventCallbacks = {};
   final EventHandler eventHandler;
   bool pongReceived = false;
+  Timer? _checkPongTimer;
 
   Connection({
     required this.url,
@@ -55,16 +56,24 @@ class Connection {
 
   void disconnect() {
     _socket?.close();
+    _checkPongTimer?.cancel();
   }
 
   Future<void> connect() async {
     _socket = await WebSocket.connect(url);
     _socket?.listen(onMessage);
     sendPing();
-    Timer.periodic(Duration(seconds: 60), (timer) => _checkPong());
+    _resetCheckPong();
+  }
+
+  void _resetCheckPong() {
+    _checkPongTimer?.cancel();
+    _checkPongTimer =
+        Timer.periodic(Duration(seconds: 60), (timer) => _checkPong());
   }
 
   void onMessage(data) {
+    _resetCheckPong();
     final json = jsonDecode(data);
     if (json.containsKey('channel')) {
       eventHandler(json['event'], json['channel'], jsonDecode(json['data']));
