@@ -1,3 +1,9 @@
+## 0.1.6 - January 25, 2022
+
+- resubscribe channels on reconnect
+- reconnect after a connection error (status between 4200 and 4300)
+- use the existent binds on channel resubscription
+
 ## 0.1.5 - November 23, 2021
 
 - Change auto retry to be less aggressive

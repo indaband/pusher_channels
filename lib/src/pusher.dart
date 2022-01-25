@@ -8,7 +8,7 @@ class Pusher {
   final String cluster;
   final String client = 'pusher.dart';
   final String key;
-  final String version = '0.1.5';
+  final String version = '0.1.6';
   final int protocol = 6;
 
   PusherGlobalCallback? globalCallback;
@@ -21,6 +21,7 @@ class Pusher {
           url:
               'wss://ws-$cluster.$url/app/$key?client=$client&version=$version&protocol=$protocol',
           eventHandler: connectionHandler,
+          afterConnect: afterConnect,
         );
   }
 
@@ -32,9 +33,21 @@ class Pusher {
     connection.disconnect();
   }
 
+  void afterConnect() {
+    for (var channel in channels.keys) {
+      subscribe(channel);
+    }
+  }
+
   Channel subscribe(String channelName) {
     final data = {'channel': channelName};
     connection.sendEvent('pusher:subscribe', data);
+
+    if (channels.containsKey(channelName)) {
+      final channel = channels[channelName];
+      return channel!;
+    }
+
     final channel = Channel(name: channelName);
     channels[channelName] = channel;
     return channel;
@@ -49,7 +62,10 @@ class Pusher {
   }
 
   void connectionHandler(
-      String eventName, String channelName, Map<String, dynamic> data) {
+    String eventName,
+    String channelName,
+    Map<String, dynamic> data,
+  ) {
     channels[channelName]?.handleEvent(eventName, data);
     globalCallback?.call(channelName, eventName, data);
   }

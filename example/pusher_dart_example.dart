@@ -8,5 +8,4 @@ void main() async {
     print('WOW event: $event');
   });
   await Future.delayed(Duration(seconds: 60));
-
 }

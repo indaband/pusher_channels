@@ -13,10 +13,12 @@ class Connection {
   final EventHandler eventHandler;
   bool pongReceived = false;
   Timer? _checkPongTimer;
+  VoidCallback afterConnect;
 
   Connection({
     required this.url,
     required this.eventHandler,
+    required this.afterConnect,
   }) {
     bind('pusher:connection_established', _connect_handler);
     bind('pusher:pong', _pongHandler);
@@ -38,6 +40,10 @@ class Connection {
       return;
     }
 
+    reconnect();
+  }
+
+  void reconnect() {
     disconnect();
     connect();
   }
@@ -45,6 +51,10 @@ class Connection {
   void _pusher_error_handler(data) {
     if (data.containsKey('code')) {
       print('ERROR HANDLER code: ${data["code"]}');
+
+      if (data['code'] >= 4200 && data['code'] < 4300) {
+        reconnect();
+      }
     } else {
       print('Connection: No error code supplied');
     }
@@ -64,6 +74,8 @@ class Connection {
     _socket?.listen(onMessage);
     sendPing();
     _resetCheckPong();
+
+    afterConnect();
   }
 
   void _resetCheckPong() {
