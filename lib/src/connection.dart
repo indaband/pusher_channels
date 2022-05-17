@@ -88,7 +88,7 @@ class Connection {
     _resetCheckPong();
     final json = jsonDecode(data);
     if (json.containsKey('channel')) {
-      eventHandler(json['event'], json['channel'], jsonDecode(json['data']));
+      eventHandler(json['event'], json['channel'], json['data'] is String ? jsonDecode(json['data']) : json['data']);
     } else {
       _eventCallbacks[json['event']]?.call(json['data'] ?? {});
     }
