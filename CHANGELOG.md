@@ -1,3 +1,6 @@
+## 0.2.0 - May 11, 2022
+- Update mocktail dependency
+
 ## 0.1.6 - January 25, 2022
 
 - resubscribe channels on reconnect
