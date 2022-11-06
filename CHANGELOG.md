@@ -1,3 +1,6 @@
+## 0.3.0 - November 6, 2022
+- Replace pedantic by linter
+
 ## 0.2.0 - May 11, 2022
 - Update mocktail dependency
 

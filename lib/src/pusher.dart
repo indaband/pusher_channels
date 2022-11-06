@@ -8,7 +8,7 @@ class Pusher {
   final String cluster;
   final String client = 'pusher.dart';
   final String key;
-  final String version = '0.2.0';
+  final String version = '0.3.0';
   final int protocol = 6;
 
   PusherGlobalCallback? globalCallback;
