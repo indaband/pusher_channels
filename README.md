@@ -1,4 +1,4 @@
-`pusher_channels` is a pure Dart pusher channels client.
+`pusher_channels` is a not official pure Dart pusher channels client.
 
 This client is work in progress and it is unstable.
 
