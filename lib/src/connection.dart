@@ -20,12 +20,12 @@ class Connection {
     required this.eventHandler,
     required this.afterConnect,
   }) {
-    bind('pusher:connection_established', _connect_handler);
+    bind('pusher:connection_established', _connectHandler);
     bind('pusher:pong', _pongHandler);
-    bind('pusher:error', _pusher_error_handler);
+    bind('pusher:error', _pusherErrorHandler);
   }
 
-  void _connect_handler(data) {
+  void _connectHandler(data) {
     print('Connection: Establisheds first connection $data');
   }
 
@@ -48,7 +48,7 @@ class Connection {
     connect();
   }
 
-  void _pusher_error_handler(data) {
+  void _pusherErrorHandler(data) {
     if (data.containsKey('code')) {
       print('ERROR HANDLER code: ${data["code"]}');
 
