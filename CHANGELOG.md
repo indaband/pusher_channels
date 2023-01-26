@@ -1,3 +1,7 @@
+## 0.4.0 - January 26, 2023
+- Add a dedicated checker for connection status. 
+  This will improve the automatic reconnection resilience.
+
 ## 0.3.0 - November 6, 2022
 - Replace pedantic by linter
 
