@@ -4,7 +4,13 @@ import 'dart:io';
 
 typedef VoidCallback = void Function();
 typedef EventHandler = void Function(
-    String eventName, String channelName, Map<String, dynamic> data);
+  String eventName,
+  String channelName,
+  Map<String, dynamic> data,
+);
+
+const _kCheckPongInternal = Duration(seconds: 60);
+const _kCheckConnectionInterval = Duration(seconds: 1);
 
 class Connection {
   final String url;
@@ -13,6 +19,7 @@ class Connection {
   final EventHandler eventHandler;
   bool pongReceived = false;
   Timer? _checkPongTimer;
+  Timer? _checkConnectionTimer;
   VoidCallback afterConnect;
 
   Connection({
@@ -33,14 +40,18 @@ class Connection {
     pongReceived = true;
   }
 
+  void _checkConnection() {
+    if (_socket?.closeCode != null) {
+      reconnect();
+    }
+  }
+
   void _checkPong() {
     if (pongReceived) {
       pongReceived = false;
       sendPing();
       return;
     }
-
-    reconnect();
   }
 
   void reconnect() {
@@ -70,18 +81,34 @@ class Connection {
   }
 
   Future<void> connect() async {
-    _socket = await WebSocket.connect(url);
-    _socket?.listen(onMessage);
-    sendPing();
-    _resetCheckPong();
+    try {
+      _socket = await WebSocket.connect(url);
+      _socket?.listen(onMessage);
+      sendPing();
+      _resetCheckPong();
 
-    afterConnect();
+      afterConnect();
+    } catch (error) {
+      print('Connection: connection error $error');
+    }
+
+    _resetCheckConnection();
+  }
+
+  void _resetCheckConnection() {
+    _checkConnectionTimer?.cancel();
+    _checkConnectionTimer = Timer.periodic(
+      _kCheckConnectionInterval,
+      (timer) => _checkConnection(),
+    );
   }
 
   void _resetCheckPong() {
     _checkPongTimer?.cancel();
-    _checkPongTimer =
-        Timer.periodic(Duration(seconds: 60), (timer) => _checkPong());
+    _checkPongTimer = Timer.periodic(
+      _kCheckPongInternal,
+      (timer) => _checkPong(),
+    );
   }
 
   void onMessage(data) {
