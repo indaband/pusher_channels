@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:developer';
+
+const _kLogName = 'PusherConnection';
 
 typedef VoidCallback = void Function();
 typedef EventHandler = void Function(
@@ -33,7 +36,7 @@ class Connection {
   }
 
   void _connectHandler(data) {
-    print('Connection: Establisheds first connection $data');
+    log('Established first connection: $data', name: _kLogName);
   }
 
   void _pongHandler(data) {
@@ -50,7 +53,6 @@ class Connection {
     if (pongReceived) {
       pongReceived = false;
       sendPing();
-      return;
     }
   }
 
@@ -60,14 +62,23 @@ class Connection {
   }
 
   void _pusherErrorHandler(data) {
-    if (data.containsKey('code')) {
-      print('ERROR HANDLER code: ${data["code"]}');
-
-      if (data['code'] >= 4200 && data['code'] < 4300) {
-        reconnect();
+    try {
+      if (data is Map && data.containsKey('code')) {
+        final code = data['code'];
+        if (code != null && code >= 4200 && code < 4300) {
+          reconnect();
+          log('Trying to reconnect after error $code', name: _kLogName);
+        }
+      } else {
+        log('Received pusher:error without code: $data', name: _kLogName);
       }
-    } else {
-      print('Connection: No error code supplied');
+    } catch (e, s) {
+      log(
+        'Could not handle connection error',
+        error: e,
+        stackTrace: s,
+        name: _kLogName,
+      );
     }
   }
 
@@ -86,12 +97,10 @@ class Connection {
       _socket?.listen(onMessage);
       sendPing();
       _resetCheckPong();
-
       afterConnect();
-    } catch (error) {
-      print('Connection: connection error $error');
+    } catch (e, s) {
+      log('Connection error', error: e, stackTrace: s, name: _kLogName);
     }
-
     _resetCheckConnection();
   }
 
