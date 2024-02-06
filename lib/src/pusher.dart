@@ -8,7 +8,7 @@ class Pusher {
   final String cluster;
   final String client = 'pusher.dart';
   final String key;
-  final String version = '0.4.0';
+  final String version = '0.5.0';
   final int protocol = 6;
 
   PusherGlobalCallback? globalCallback;
@@ -76,5 +76,19 @@ class Pusher {
 
   void unbindGlobal() {
     globalCallback = null;
+  }
+
+  void trigger({
+    required String channelName,
+    required String eventName,
+    dynamic data,
+  }) {
+    connection.sendEvent(
+      // client events should have the 'client-' prefix'
+      // refs: https://pusher.com/docs/channels/library_auth_reference/pusher-websockets-protocol/#triggering-channel-client-events
+      'client-$eventName',
+      data,
+      channelName: channelName,
+    );
   }
 }

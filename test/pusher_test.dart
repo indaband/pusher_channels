@@ -100,5 +100,21 @@ void main() {
       pusher.unbindGlobal();
       expect(pusher.globalCallback == null, true);
     });
+
+    test('trigger', () {
+      pusher.trigger(
+        channelName: 'channel-name',
+        eventName: 'event-name',
+        data: {'key': 'value'},
+      );
+
+      verify(
+        () => pusher.connection.sendEvent(
+          'client-event-name',
+          {'key': 'value'},
+          channelName: 'channel-name',
+        ),
+      ).called(1);
+    });
   });
 }
