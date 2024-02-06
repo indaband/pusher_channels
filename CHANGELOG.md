@@ -1,3 +1,7 @@
+## 0.5.2 - February 6, 2024
+- Fixes error handler
+- Use dart's developer log instead of print
+
 ## 0.5.1 - February 6, 2024
 - Update sdk requirements
 
