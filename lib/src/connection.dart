@@ -67,9 +67,10 @@ class Connection {
         final code = data['code'];
         if (code != null && code >= 4200 && code < 4300) {
           reconnect();
+          log('Trying to reconnect after error $code', name: _kLogName);
         }
       } else {
-        log('No error code supplied', name: _kLogName);
+        log('Received pusher:error without code: $data', name: _kLogName);
       }
     } catch (e, s) {
       log(
