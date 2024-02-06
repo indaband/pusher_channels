@@ -121,11 +121,20 @@ class Connection {
     }
   }
 
-  void sendEvent(String eventName, Map<String, String> data) {
+  void sendEvent(
+    String eventName,
+    dynamic data, {
+    String channelName = '',
+  }) {
     final event = {
       'event': eventName,
       'data': data,
     };
+
+    if (channelName.isNotEmpty) {
+      event['channel'] = channelName;
+    }
+
     _socket?.add(jsonEncode(event));
   }
 

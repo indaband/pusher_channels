@@ -1,3 +1,6 @@
+## 0.5.0 - February 6, 2024
+- Add support for trigger events
+
 ## 0.4.0 - January 26, 2023
 - Add a dedicated checker for connection status. 
   This will improve the automatic reconnection resilience.
