@@ -84,7 +84,9 @@ class Pusher {
     dynamic data,
   }) {
     connection.sendEvent(
-      eventName,
+      // client events should have the 'client-' prefix'
+      // refs: https://pusher.com/docs/channels/library_auth_reference/pusher-websockets-protocol/#triggering-channel-client-events
+      'client-$eventName',
       data,
       channelName: channelName,
     );

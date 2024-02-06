@@ -110,7 +110,7 @@ void main() {
 
       verify(
         () => pusher.connection.sendEvent(
-          'event-name',
+          'client-event-name',
           {'key': 'value'},
           channelName: 'channel-name',
         ),
