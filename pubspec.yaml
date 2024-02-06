@@ -1,11 +1,11 @@
 name: pusher_channels
 description: A pure Dart pusher channels client
-version: 0.5.0
+version: 0.5.1
 homepage: https://github.com/indaband/pusher_channels
 documentation: https://github.com/indaband/pusher_channels/blob/main/README.md
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
 
 dev_dependencies:
   test: ^1.25.2

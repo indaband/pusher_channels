@@ -1,3 +1,6 @@
+## 0.5.1 - February 6, 2024
+- Update sdk requirements
+
 ## 0.5.0 - February 6, 2024
 - Add support for trigger events
 
