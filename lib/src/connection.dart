@@ -36,7 +36,7 @@ class Connection {
   }
 
   void _connectHandler(data) {
-    log('Connection: Establisheds first connection $data', name: _kLogName);
+    log('Established first connection: $data', name: _kLogName);
   }
 
   void _pongHandler(data) {
@@ -53,7 +53,6 @@ class Connection {
     if (pongReceived) {
       pongReceived = false;
       sendPing();
-      return;
     }
   }
 
@@ -73,7 +72,12 @@ class Connection {
         log('No error code supplied', name: _kLogName);
       }
     } catch (e, s) {
-      log('Could not handle connection error', error: e, stackTrace: s, name: _kLogName,);
+      log(
+        'Could not handle connection error',
+        error: e,
+        stackTrace: s,
+        name: _kLogName,
+      );
     }
   }
 
@@ -92,10 +96,9 @@ class Connection {
       _socket?.listen(onMessage);
       sendPing();
       _resetCheckPong();
-
       afterConnect();
     } catch (e, s) {
-      log('Connection: connection error', error: e, stackTrace: s, name: _kLogName);
+      log('Connection error', error: e, stackTrace: s, name: _kLogName);
     }
     _resetCheckConnection();
   }
