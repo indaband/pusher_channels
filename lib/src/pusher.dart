@@ -8,7 +8,7 @@ class Pusher {
   final String cluster;
   final String client = 'pusher.dart';
   final String key;
-  final String version = '0.5.1';
+  final String version = '0.5.3';
   final int protocol = 6;
 
   PusherGlobalCallback? globalCallback;
@@ -25,13 +25,9 @@ class Pusher {
         );
   }
 
-  Future<void> connect() async {
-    return connection.connect();
-  }
+  Future<void> connect() async => connection.connect();
 
-  void disconnect() {
-    connection.disconnect();
-  }
+  void disconnect() => connection.disconnect();
 
   void afterConnect() {
     for (var channel in channels.keys) {
