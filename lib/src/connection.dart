@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:developer';
+import 'dart:io';
 
 const _kLogName = 'PusherConnection';
 
@@ -121,12 +121,21 @@ class Connection {
   }
 
   void onMessage(data) {
-    _resetCheckPong();
-    final json = jsonDecode(data);
-    if (json.containsKey('channel')) {
-      eventHandler(json['event'], json['channel'], jsonDecode(json['data']));
-    } else {
-      _eventCallbacks[json['event']]?.call(json['data'] ?? {});
+    try {
+      _resetCheckPong();
+      final json = jsonDecode(data);
+      if (json.containsKey('channel')) {
+        eventHandler(json['event'], json['channel'], jsonDecode(json['data']));
+      } else {
+        _eventCallbacks[json['event']]?.call(json['data'] ?? {});
+      }
+    } catch (e, s) {
+      log(
+        'Unable to handle onMessage',
+        error: e,
+        stackTrace: s,
+        name: _kLogName,
+      );
     }
   }
 
@@ -135,16 +144,25 @@ class Connection {
     dynamic data, {
     String channelName = '',
   }) {
-    final event = {
-      'event': eventName,
-      'data': data,
-    };
+    try {
+      final event = {
+        'event': eventName,
+        'data': data,
+      };
 
-    if (channelName.isNotEmpty) {
-      event['channel'] = channelName;
+      if (channelName.isNotEmpty) {
+        event['channel'] = channelName;
+      }
+
+      _socket?.add(jsonEncode(event));
+    } catch (e, s) {
+      log(
+        'Unable to send event $eventName to channel $channelName',
+        error: e,
+        stackTrace: s,
+        name: _kLogName,
+      );
     }
-
-    _socket?.add(jsonEncode(event));
   }
 
   void sendPing() {

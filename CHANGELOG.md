@@ -1,3 +1,6 @@
+## 0.5.3 - March 20, 2024
+- Fixes error handler when subscribing to channel
+
 ## 0.5.2 - February 6, 2024
 - Fixes error handler
 - Use dart's developer log instead of print
