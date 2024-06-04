@@ -28,6 +28,19 @@ void main() {
       );
     });
 
+    test('bindNamedGlobal', () {
+      var value = '';
+      const callbackName = 'callbackName';
+      channel.bindNamedGlobal(callbackName, (eventName, data) {
+        value = 'event $eventName with data $data has been executed';
+      });
+      channel.handleEvent('event-name', {'key': 'value'});
+      expect(
+        value,
+        'event event-name with data {key: value} has been executed',
+      );
+    });
+
     test('unbind', () {
       channel.bind('event-name', (_) {});
       expect(channel.eventCallbacks.containsKey('event-name'), true);
@@ -42,6 +55,15 @@ void main() {
 
       channel.unbindGlobal();
       expect(channel.globalCallback == null, true);
+    });
+
+    test('unbindNamedGlobal', () {
+      const callbackName = 'callbackName';
+      channel.bindNamedGlobal(callbackName, (_, __) {});
+      expect(channel.namedGlobalCallbacks.containsKey(callbackName), true);
+
+      channel.unbindNamedGlobal(callbackName);
+      expect(channel.namedGlobalCallbacks.containsKey(callbackName), false);
     });
   });
 }

@@ -1,3 +1,6 @@
+## 0.6.0 - June 4, 2024
+- Add support for named global callbacks
+
 ## 0.5.3 - March 20, 2024
 - Fixes error handler when subscribing to channel
 
